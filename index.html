@@ -3,36 +3,374 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zekai Zhan</title> <!-- 改成你的名字 -->
+    <meta name="description" content="Zekai Zhan — Biomedical Engineering undergraduate at SUSTech, researching brain-computer interfaces and artificial intelligence.">
+    <title>Zekai Zhan</title>
     <style>
-        /* 下面是简单的样式，让页面居中、好看 */
+        :root {
+            --bg: #f8f9fb;
+            --card: #ffffff;
+            --text: #1f2328;
+            --muted: #5c6670;
+            --accent: #4f6ef7;
+            --accent-soft: #edf1ff;
+            --border: #e6e8ee;
+            --radius: 16px;
+            --shadow: 0 1px 2px rgba(20, 30, 60, .05), 0 10px 30px rgba(20, 30, 60, .06);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        html { scroll-behavior: smooth; }
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            max-width: 800px;
-            margin: 50px auto; /* 上下间距50px，水平居中 */
-            padding: 0 20px;
-            color: #333;
-            line-height: 1.6;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+                "Helvetica Neue", Arial, "PingFang SC", "Microsoft YaHei", sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        /* 背景装饰：两团柔和的渐变光斑 */
+        .glow {
+            position: fixed;
+            width: 480px;
+            height: 480px;
+            border-radius: 50%;
+            filter: blur(120px);
+            opacity: .45;
+            pointer-events: none;
+            z-index: -1;
+        }
+        .glow-1 { background: #dbe4ff; top: -120px; right: -120px; }
+        .glow-2 { background: #ffe9d6; bottom: -160px; left: -140px; opacity: .35; }
+
+        .container {
+            max-width: 760px;
+            margin: 0 auto;
+            padding: 40px 24px 64px;
+        }
+
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-bottom: 48px;
+        }
+        .topbar nav { display: flex; gap: 26px; }
+        .topbar nav a {
+            color: var(--muted);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            padding-bottom: 3px;
+            border-bottom: 2px solid transparent;
+            transition: color .2s, border-bottom-color .2s;
+        }
+        .topbar nav a:hover,
+        .topbar nav a.active {
+            color: var(--accent);
+            border-bottom-color: var(--accent);
+        }
+
+        /* 首屏区 */
+        header { animation: fadeUp .7s ease both; }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(18px); }
+            to   { opacity: 1; transform: none; }
         }
         h1 {
-            font-size: 2.5em;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 10px;
+            font-size: clamp(2.4rem, 7vw, 3.6rem);
+            font-weight: 800;
+            letter-spacing: -1px;
+            line-height: 1.1;
         }
-        .email-list {
-            list-style-type: disc;
-            padding-left: 20px;
+        .subtitle {
+            margin-top: 10px;
+            font-size: 1.15rem;
+            color: var(--muted);
+        }
+        .intro {
+            margin-top: 22px;
+            max-width: 620px;
+            color: var(--muted);
+        }
+
+        .actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 30px;
+        }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 11px 20px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            transition: transform .15s, box-shadow .15s;
+        }
+        .btn:hover { transform: translateY(-2px); }
+        .btn-primary {
+            background: var(--accent);
+            color: #fff;
+            box-shadow: 0 6px 18px rgba(79, 110, 247, .32);
+        }
+        .btn-ghost {
+            background: var(--card);
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+        .btn-ghost:hover { box-shadow: var(--shadow); }
+
+        /* 通用板块 */
+        section { margin-top: 64px; scroll-margin-top: 24px; }
+        .section-title {
+            font-size: 1.15rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 24px;
+        }
+        .section-title::before {
+            content: "";
+            width: 6px;
+            height: 6px;
+            background: var(--accent);
+            border-radius: 50%;
+        }
+
+        /* 研究方向卡片 */
+        .interest-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+        .interest-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 22px 24px;
+            box-shadow: var(--shadow);
+            transition: transform .2s, box-shadow .2s;
+        }
+        .interest-card:hover { transform: translateY(-4px); }
+        .interest-icon {
+            width: 38px;
+            height: 38px;
+            display: grid;
+            place-items: center;
+            background: var(--accent-soft);
+            color: var(--accent);
+            border-radius: 10px;
+            margin-bottom: 14px;
+        }
+        .interest-title { font-weight: 700; font-size: 1rem; }
+        .interest-card p { margin-top: 6px; color: var(--muted); font-size: .92rem; }
+
+        /* 教育经历卡片 */
+        .edu-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 24px 26px;
+            box-shadow: var(--shadow);
+            transition: transform .2s, box-shadow .2s;
+        }
+        .edu-card:hover { transform: translateY(-4px); }
+        .edu-head {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: baseline;
+            gap: 8px;
+        }
+        .edu-degree { font-size: 1.08rem; font-weight: 700; }
+        .edu-date {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--accent);
+            background: var(--accent-soft);
+            padding: 3px 10px;
+            border-radius: 999px;
+        }
+        .edu-school { margin-top: 6px; color: var(--muted); font-weight: 600; }
+        .edu-desc { margin-top: 10px; color: var(--muted); font-size: .95rem; }
+
+        /* 联系板块 */
+        .contact-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 24px 26px;
+            box-shadow: var(--shadow);
+        }
+        .contact-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 12px;
+            margin-top: 14px;
+        }
+        .contact-email {
+            font-weight: 600;
+            color: var(--accent);
+            word-break: break-all;
+        }
+        .copy-feedback { color: #16a34a; font-size: 13px; font-weight: 600; }
+
+        footer {
+            margin-top: 64px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border);
+            color: var(--muted);
+            font-size: 13px;
+            text-align: center;
+        }
+
+        /* 滚动到视口时淡入 */
+        .reveal {
+            opacity: 0;
+            transform: translateY(18px);
+            transition: opacity .6s ease, transform .6s ease;
+        }
+        .reveal.visible { opacity: 1; transform: none; }
+
+        @media (max-width: 520px) {
+            .container { padding-top: 28px; }
+            .interest-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
-    <h1>Zekai Zhan</h1> <!-- 改成你的名字 -->
+    <div class="glow glow-1"></div>
+    <div class="glow glow-2"></div>
 
-    <p>Email:</p>
-    <ul class="email-list">
-        <li>12511504@mail.sustech.edu.cn</li> <!-- 改成你的邮箱 -->
-    </ul>
+    <div class="container">
+        <div class="topbar">
+            <nav>
+                <a href="#about">About</a>
+                <a href="#research">Research</a>
+                <a href="#education">Education</a>
+                <a href="#contact">Contact</a>
+            </nav>
+        </div>
 
-    <p>This is my personal homepage.</p> <!-- 可以改成你自己的话 -->
+        <header id="about">
+            <h1>Zekai Zhan</h1>
+            <p class="subtitle">Undergraduate in Biomedical Engineering · Southern University of Science and Technology</p>
+            <p class="intro">I'm an undergraduate student at SUSTech, focusing on <strong>brain-computer interfaces</strong> and <strong>artificial intelligence</strong>. <!-- 改成你自己的自我介绍 --></p>
+            <div class="actions">
+                <a class="btn btn-primary" href="mailto:12511504@mail.sustech.edu.cn">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
+                    Email Me
+                </a>
+                <a class="btn btn-ghost" href="#education">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10 12 5 2 10l10 5 10-5z"/><path d="M6 12v5c0 1.5 2.7 3 6 3s6-1.5 6-3v-5"/></svg>
+                    My Education
+                </a>
+            </div>
+        </header>
+
+        <section id="research">
+            <h2 class="section-title">Research Interests</h2>
+            <div class="interest-grid">
+                <div class="interest-card reveal">
+                    <div class="interest-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+                    </div>
+                    <div class="interest-title">Brain-Computer Interfaces</div>
+                    <p>Decoding neural signals to build direct pathways between the brain and machines. <!-- 改成你的一句话介绍 --></p>
+                </div>
+                <div class="interest-card reveal">
+                    <div class="interest-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="7" width="10" height="10" rx="2"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M9 9h6v6H9z"/></svg>
+                    </div>
+                    <div class="interest-title">Artificial Intelligence</div>
+                    <p>Applying machine learning to real-world problems, especially in healthcare and neuroscience. <!-- 改成你的一句话介绍 --></p>
+                </div>
+            </div>
+        </section>
+
+        <section id="education">
+            <h2 class="section-title">Education</h2>
+            <div class="edu-card reveal">
+                <div class="edu-head">
+                    <span class="edu-degree">B.S. in Biomedical Engineering</span>
+                    <span class="edu-date">2025 — 2029</span>
+                </div>
+                <p class="edu-school">Southern University of Science and Technology</p>
+                <p class="edu-desc">GPA 3.96 / 4.0 · Research focus: brain-computer interfaces and artificial intelligence. <!-- 补充其他想展示的内容 --></p>
+            </div>
+        </section>
+
+        <section id="contact">
+            <h2 class="section-title">Contact</h2>
+            <div class="contact-card reveal">
+                <p>Feel free to reach out — I'm always happy to talk about research and collaboration.</p>
+                <div class="contact-row">
+                    <span class="contact-email">12511504@mail.sustech.edu.cn</span>
+                    <button class="btn btn-ghost" id="copy-btn">Copy</button>
+                    <span class="copy-feedback" id="copy-feedback" hidden>Copied!</span>
+                </div>
+            </div>
+        </section>
+
+        <footer>© 2026 Zekai Zhan</footer>
+    </div>
+
+    <script>
+        // 导航：点击后平滑滚动到对应板块
+        const navLinks = document.querySelectorAll('.topbar nav a');
+        navLinks.forEach(link => {
+            link.addEventListener('click', e => {
+                const target = document.getElementById(link.getAttribute('href').slice(1));
+                if (target) {
+                    e.preventDefault();
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // 滚动时高亮当前所在板块对应的导航项
+        const spy = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    navLinks.forEach(l => {
+                        l.classList.toggle('active', l.getAttribute('href') === '#' + entry.target.id);
+                    });
+                }
+            });
+        }, { rootMargin: '-40% 0px -55% 0px' });
+        document.querySelectorAll('header[id], section[id]').forEach(s => spy.observe(s));
+
+        // 卡片滚动到视口时淡入
+        const revealObserver = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('visible');
+            });
+        }, { threshold: 0.15 });
+        document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+        // 复制邮箱按钮
+        const copyBtn = document.getElementById('copy-btn');
+        const feedback = document.getElementById('copy-feedback');
+        if (copyBtn) {
+            copyBtn.addEventListener('click', async () => {
+                try {
+                    await navigator.clipboard.writeText('12511504@mail.sustech.edu.cn');
+                    feedback.hidden = false;
+                    setTimeout(() => { feedback.hidden = true; }, 1600);
+                } catch { /* 剪贴板不可用（如 http 环境）时静默忽略 */ }
+            });
+        }
+    </script>
 </body>
 </html>
